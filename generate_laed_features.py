@@ -132,7 +132,7 @@ def main(config):
 
         if not os.path.exists(config.out_folder):
             os.makedirs(config.out_folder)
-        with open(os.path.join(config.out_folder, 'dialogs_{}.pkl'.format(dataset_name)), 'w') as result_out:
+        with open(os.path.join(config.out_folder, 'dialogs_{}.pkl'.format(dataset_name)), 'wb') as result_out:
             pickle.dump(features, result_out)
 
     if config.process_seed_data:
