@@ -43,6 +43,8 @@ def process_data_feed(model, feed, config):
             break
         laed_out = model.forward(batch, TEACH_FORCE, config.gen_type, return_latent=True)
         laed_z = laed_out['y_ids']
+        print(len(laed_z))
+        print(laed_z)
         features.append(laed_z.data.cpu().numpy())
     return np.array(features).reshape(-1, config.y_size * config.k)
 
