@@ -11,9 +11,9 @@ import pickle
 sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
 
-from laed.dataset import data_loaders
-from laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
-from laed.enc2dec.decoders import TEACH_FORCE 
+from NeuralDialog_LAED.laed.dataset import data_loaders
+from NeuralDialog_LAED.laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
+from NeuralDialog_LAED.laed.enc2dec.decoders import TEACH_FORCE
 from utils import corpora
 from utils.corpora import load_vocab, load_model, load_config
 
