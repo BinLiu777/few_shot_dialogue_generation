@@ -46,22 +46,26 @@ data_arg.add_argument('--log_dir', type=str, default='logs')
 
 # Network
 net_arg = add_argument_group('Network')
-net_arg.add_argument('--y_size', type=int, default=20)  # number of discrete variables
-net_arg.add_argument('--k', type=int, default=10)  # number of classes for each variable
+net_arg = add_argument_group('Network')
+net_arg.add_argument('--use_reg_kl', type=str2bool, default=True)
+net_arg.add_argument('--use_attribute', type=str2bool, default=True)
+net_arg.add_argument('--y_size', type=int, default=10)
+net_arg.add_argument('--k', type=int, default=10)
+
 net_arg.add_argument('--rnn_cell', type=str, default='gru')
 net_arg.add_argument('--embed_size', type=int, default=200)
 net_arg.add_argument('--utt_type', type=str, default='rnn')
-net_arg.add_argument('--enc_cell_size', type=int, default=512)
+net_arg.add_argument('--utt_cell_size', type=int, default=256)
+net_arg.add_argument('--ctx_cell_size', type=int, default=512)
 net_arg.add_argument('--dec_cell_size', type=int, default=512)
-net_arg.add_argument('--bi_enc_cell', type=str2bool, default=False)
+net_arg.add_argument('--bi_ctx_cell', type=str2bool, default=False)
 net_arg.add_argument('--max_utt_len', type=int, default=40)
 net_arg.add_argument('--max_dec_len', type=int, default=40)
 net_arg.add_argument('--max_vocab_cnt', type=int, default=10000)
 net_arg.add_argument('--num_layer', type=int, default=1)
 net_arg.add_argument('--use_attn', type=str2bool, default=False)
 net_arg.add_argument('--attn_type', type=str, default='cat')
-net_arg.add_argument('--use_mutual', type=str2bool, default=True)
-net_arg.add_argument('--use_reg_kl', type=str2bool, default=True)
+net_arg.add_argument('--greedy_q', type=str2bool, default=True)
 
 
 # Training / test parameters
@@ -80,8 +84,9 @@ train_arg.add_argument('--improve_threshold', type=float, default=0.996)
 train_arg.add_argument('--patient_increase', type=float, default=2.0)
 train_arg.add_argument('--early_stop', type=str2bool, default=True)
 train_arg.add_argument('--max_epoch', type=int, default=50)
+train_arg.add_argument('--loss_type', type=str, default="e2e")
+train_arg.add_argument('--include_eod', type=str2bool, default=True)
 train_arg.add_argument('--include_domain', type=str2bool, default=True)
-
 
 # MISC
 misc_arg = add_argument_group('Misc')
