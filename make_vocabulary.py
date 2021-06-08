@@ -5,8 +5,8 @@ import logging
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-LAED'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-ZSDG'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
 
 from laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
 
@@ -76,7 +76,7 @@ train_arg.add_argument('--early_stop', type=str2bool, default=True)
 train_arg.add_argument('--max_epoch', type=int, default=50)
 train_arg.add_argument('--entities_file',
                        type=str,
-                       default='NeuralDialog-ZSDG/data/stanford/kvret_entities.json')
+                       default='NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
 
 
 # MISC

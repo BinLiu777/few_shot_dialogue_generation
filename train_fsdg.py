@@ -8,8 +8,8 @@ import random
 
 import numpy as np
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-ZSDG'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 
 from utils import data_loaders
 from zsdg.main import train, validate
@@ -83,7 +83,7 @@ def get_model(config, train_client):
 data_arg = add_argument_group('Data')
 data_arg.add_argument('--data_dir',
                       nargs='+',
-                      default=['NeuralDialog-ZSDG/data/stanford'])
+                      default=['NeuralDialog_ZSDG/data/stanford'])
 data_arg.add_argument('--log_dir', type=str, default='logs')
 data_arg.add_argument('--laed_z_folders', nargs='+', default=[])
 
@@ -147,7 +147,7 @@ train_arg.add_argument('--source_example_cnt', type=int, default=150)
 train_arg.add_argument('--domain_description', type=str, default='nlu')
 train_arg.add_argument('--entities_file',
                        type=str,
-                       default='NeuralDialog-ZSDG/data/stanford/kvret_entities.json')
+                       default='NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
 
 # Which model is used
 net_arg.add_argument('--action_match', type=str2bool, default=True)

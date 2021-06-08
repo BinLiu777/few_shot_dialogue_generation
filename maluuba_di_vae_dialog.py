@@ -8,7 +8,7 @@ import sys
 
 import torch
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 
 from laed import evaluators, utt_utils, dialog_utils
 from laed import main as engine

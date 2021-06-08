@@ -3,8 +3,8 @@ from argparse import ArgumentParser
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'NeuralDialog-LAED'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'NeuralDialog-ZSDG'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'NeuralDialog_LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'NeuralDialog_ZSDG'))
 
 from zsdg.utils import str2bool
 from corpora import ZslBlisCorpus
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('--target_example_cnt', type=int, default=150)
     parser.add_argument('--entities_file',
                         type=str,
-                        default='NeuralDialog-ZSDG/data/stanford/kvret_entities.json')
+                        default='NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
     parser.add_argument('--include_domain', type=str2bool, default=True)
 
 

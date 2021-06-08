@@ -5,8 +5,8 @@ import os
 import torch
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-ZSDG'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 
 from utils import data_loaders
 from utils.laed_utils import load_laed_features
@@ -97,7 +97,7 @@ train_arg.add_argument('--black_ratio', type=float, default=1.0)
 train_arg.add_argument('--target_example_cnt', type=int, default=150)
 train_arg.add_argument('--entities_file',
                        type=str,
-                       default='NeuralDialog-ZSDG/data/stanford/kvret_entities.json')
+                       default='NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
 
 # Which model is used
 net_arg.add_argument('--action_match', type=str2bool, default=True)

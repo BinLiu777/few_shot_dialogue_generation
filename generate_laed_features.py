@@ -8,8 +8,8 @@ import sys
 import numpy as np
 import pickle
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-LAED'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog-ZSDG'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
 
 from laed.dataset import data_loaders
 from laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
@@ -83,7 +83,7 @@ def main(config):
     setattr(laed_config, 'include_domain', True)
     setattr(laed_config, 'include_example', False)
     setattr(laed_config, 'include_state', True)
-    setattr(laed_config, 'entities_file', 'NeuralDialog-ZSDG/data/stanford/kvret_entities.json')
+    setattr(laed_config, 'entities_file', 'NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
     setattr(laed_config, 'action_match', True)
     setattr(laed_config, 'batch_size', config.batch_size)
     setattr(laed_config, 'data_dir', config.data_dir)
