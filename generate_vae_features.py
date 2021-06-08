@@ -87,7 +87,7 @@ def main(config):
     setattr(laed_config, 'action_match', True)
     setattr(laed_config, 'batch_size', config.batch_size)
     setattr(laed_config, 'data_dir', config.data_dir)
-    setattr(laed_config, 'include_eod', False) # for StED model
+    setattr(laed_config, 'include_eod', False)  # for StED model
     setattr(laed_config, 'domain_description', config.domain_description)
     setattr(laed_config, 'lowercase', True)
 

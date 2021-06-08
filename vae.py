@@ -13,12 +13,12 @@ import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
 
-from laed import evaluators, utt_utils, dialog_utils
-from laed import main as engine
-from laed.dataset import corpora
-from laed.dataset import data_loaders
-from laed.models import dialog_models
-from laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
+from NeuralDialog_LAED.laed import evaluators, utt_utils, dialog_utils
+from NeuralDialog_LAED.laed import main as engine
+from NeuralDialog_LAED.laed.dataset import corpora
+from NeuralDialog_LAED.laed.dataset import data_loaders
+from NeuralDialog_LAED.laed.models import dialog_models
+from NeuralDialog_LAED.laed.utils import str2bool, prepare_dirs_loggers, get_time, process_config
 
 from utils import corpora
 from utils.corpora import load_vocab

@@ -73,8 +73,11 @@ def load_model(in_model_folder, in_model_name, in_model_type, config=None, corpu
         corpus_client = LAEDBlisCorpus(config)
     module = sent_models if in_model_type == 'sent' else dialog_models
 
+    # 修改是否用GPU
+    config.use_gpu = False
     laed_model = getattr(module, in_model_name)(corpus_client, config)
-    laed_model.load_state_dict(torch.load(os.path.join(in_model_folder, 'model')))
+    # laed_model.load_state_dict(torch.load(os.path.join(in_model_folder, 'model')))
+    laed_model.load_state_dict(torch.load(os.path.join(in_model_folder, 'model'), map_location='cpu'))
 
     return laed_model
 
