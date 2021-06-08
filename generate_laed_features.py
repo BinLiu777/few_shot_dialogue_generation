@@ -46,7 +46,8 @@ def process_data_feed(model, feed, config):
         print(len(laed_z))
         print(laed_z)
         features.append(laed_z.data.cpu().numpy())
-    return np.array(features).reshape(-1, config.y_size * config.k)
+    return np.array(features).reshape(-1, config.y_size)
+    # return np.array(features).reshape(-1, config.y_size * config.k)
 
 
 def deflatten_laed_features(in_laed_features, in_dialogs, pad_mode=None):
