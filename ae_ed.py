@@ -158,14 +158,15 @@ def main(config):
 
     dialog_utils.generate_with_adv(model, test_feed, config, None, num_batch=0)
     selected_clusters = utt_utils.latent_cluster(model, train_feed, config, num_batch=None)
-    selected_outs = dialog_utils.selective_generate(model, test_feed, config, selected_clusters)
-    print(len(selected_outs))
+    if selected_clusters:
+        selected_outs = dialog_utils.selective_generate(model, test_feed, config, selected_clusters)
+        print(len(selected_outs))
 
-    with open(os.path.join(dump_file+'.json'), 'w') as f:
-        json.dump(selected_clusters, f, indent=2)
+        with open(os.path.join(dump_file+'.json'), 'w') as f:
+            json.dump(selected_clusters, f, indent=2)
 
-    with open(os.path.join(dump_file+'.out.json'), 'w') as f:
-        json.dump(selected_outs, f, indent=2)
+        with open(os.path.join(dump_file+'.out.json'), 'w') as f:
+            json.dump(selected_outs, f, indent=2)
 
     with open(os.path.join(dump_file), "wb") as f:
         print("Dumping test to {}".format(dump_file))
