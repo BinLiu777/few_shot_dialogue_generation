@@ -661,6 +661,7 @@ class LAZslStanfordCorpus(object):
 
     def __init__(self, config):
         self.config = config
+        self.config.lowercase = True
         self._path = config.data_dir[0]
         self.max_utt_len = config.max_utt_len
         self.tokenize = get_tokenize()
