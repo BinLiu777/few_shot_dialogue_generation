@@ -12,10 +12,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_ZSDG'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'NeuralDialog_LAED'))
 
 from utils import data_loaders
-from zsdg.main import train, validate
-from zsdg import hred_utils
-from zsdg.utils import str2bool, prepare_dirs_loggers, get_time, process_config
-from zsdg import evaluators
+from NeuralDialog_ZSDG.zsdg.main import train, validate
+from NeuralDialog_ZSDG.zsdg import hred_utils
+from NeuralDialog_ZSDG.zsdg.utils import str2bool, prepare_dirs_loggers, get_time, process_config
+from NeuralDialog_ZSDG.zsdg import evaluators
 
 from models.models import LAPtrHRED, ZeroShotLAPtrHRED
 from zsdg.models.models import PtrHRED, ZeroShotPtrHRED

@@ -1,6 +1,4 @@
-import pickle
-
-with open('dialogs_test.pkl', 'rb') as f:
-    fr = pickle.load(f)
-    print(fr)
-
+a = [1,2,3]
+if a:
+    b = 4
+print(b)
