@@ -6,4 +6,4 @@ CUDA_VISIBLE_DEVICES=2 python train_fsdg.py \
     --black_ratio 0.9 \
     --action_match False \
     --target_example_cnt 0 \
-    --random_seed \$rnd
+    --random_seed 2021
