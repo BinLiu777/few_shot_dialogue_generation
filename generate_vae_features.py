@@ -89,6 +89,7 @@ def main(config):
     setattr(laed_config, 'data_dir', config.data_dir)
     setattr(laed_config, 'include_eod', False) # for StED model
     setattr(laed_config, 'domain_description', config.domain_description)
+    setattr(laed_config, 'lowercase', True)
 
     if config.process_seed_data:
         assert config.corpus_client[:3] == 'Zsl', 'Incompatible coprus_client for --process_seed_data flag'
