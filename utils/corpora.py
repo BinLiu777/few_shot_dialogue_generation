@@ -99,6 +99,7 @@ class LAEDCusSerCorpus(object):
         self.test_corpus = self._read_file(os.path.join(self._path, 'customer_test.json'))
 
         if self.config.vocab != '':
+            print(self.config.vocab != '')
             self.vocab, self.rev_vocab, self.unk_id = load_vocab(self.config.vocab)
         else:
             self._build_vocab(self.config.max_vocab_cnt)
