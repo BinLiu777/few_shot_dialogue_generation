@@ -40,7 +40,7 @@ def get_config():
 data_arg = add_argument_group('Data')
 data_arg.add_argument('data_dir', nargs='+')
 data_arg.add_argument('corpus_client', help='LAEDBlisCorpus/StanfordCorpus')
-data_arg.add_argument('vocab', type=str, default='')
+data_arg.add_argument('--vocab', type=str, default='')
 data_arg.add_argument('--exclude_domains', nargs='*', default=[])
 data_arg.add_argument('--log_dir', type=str, default='logs')
 
