@@ -116,7 +116,7 @@ def main(config):
                                          dial_corpus['valid'],
                                          dial_corpus['test'])
 
-    evaluator = evaluators.BleuEvaluator('CornellMovie')
+    evaluator = evaluators.BleuEvaluator('customer_service')
 
     # create data loader that feed the deep models
     train_feed = data_loaders.SMDDataLoader("Train", train_dial, config)

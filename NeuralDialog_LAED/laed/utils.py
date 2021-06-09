@@ -158,7 +158,7 @@ def get_tokenize_zh_(text):
     res = ['<sil>' if x == '静音' else x for x in res]
     return res
 
-def get_chat_tokenize_zh():
+def get_tokenize_zh():
     return get_tokenize_zh_
 
 def get_chat_tokenize():

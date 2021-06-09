@@ -8,10 +8,10 @@ from sklearn.linear_model import SGDClassifier
 from sklearn import metrics
 from nltk.translate import bleu_score
 from nltk.translate.bleu_score import SmoothingFunction
-from laed.utils import get_dekenize, get_tokenize
+from NeuralDialog_LAED.laed.utils import get_dekenize, get_tokenize_zh
 from scipy.stats import gmean
 import logging
-from laed.dataset.corpora import EOS, BOS
+from NeuralDialog_LAED.laed.dataset.corpora import EOS, BOS
 from collections import defaultdict
 
 
@@ -63,7 +63,7 @@ class BleuEvaluator(EvaluatorBase):
 
     def get_report(self, include_error=False):
         reports = []
-        tokenize = get_tokenize()
+        tokenize = get_tokenize_zh()
 
         for domain, labels in self.domain_labels.items():
             predictions = self.domain_hyps[domain]
