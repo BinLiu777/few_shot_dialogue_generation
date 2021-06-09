@@ -123,6 +123,7 @@ class LAEDCusSerCorpus(object):
             dialog = [Pack(utt=bod_utt, speaker=0, meta=None)]
 
             for utt_idx, turn in enumerate(raw_dialog['dialogue']):
+                print(turn)
                 utt = turn['utterance']
                 author_type = turn['turn']
                 if self.config.include_domain:
