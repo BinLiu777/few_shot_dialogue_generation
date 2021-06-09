@@ -6,8 +6,8 @@ import numpy as np
 import torch
 from torch.autograd import Variable
 import torch.nn.functional as F
-from zsdg.enc2dec.base_modules import BaseRNN
-from zsdg.utils import FLOAT, LONG, cast_type
+from NeuralDialog_ZSDG.zsdg.enc2dec.base_modules import BaseRNN
+from NeuralDialog_ZSDG.zsdg.utils import FLOAT, LONG, cast_type
 
 TEACH_FORCE = "teacher_forcing"
 TEACH_GEN = "teacher_gen"

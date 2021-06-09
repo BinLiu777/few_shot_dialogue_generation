@@ -3,19 +3,19 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from zsdg.dataset.corpora import PAD, BOS, EOS, BOD
-from zsdg import criterions
-from zsdg.enc2dec.encoders import EncoderRNN, RnnUttEncoder
-from zsdg.utils import INT, FLOAT, LONG, cast_type, Pack
-from zsdg import nn_lib
-from zsdg.nn_lib import IdentityConnector, Bi2UniConnector
-from zsdg.enc2dec.decoders import GEN
-from zsdg.models.models import PtrBase
-from zsdg.models.model_bases import BaseModel
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import PAD, BOS, EOS, BOD
+from NeuralDialog_ZSDG.zsdg import criterions
+from NeuralDialog_ZSDG.zsdg.enc2dec.encoders import EncoderRNN, RnnUttEncoder
+from NeuralDialog_ZSDG.zsdg.utils import INT, FLOAT, LONG, cast_type, Pack
+from NeuralDialog_ZSDG.zsdg import nn_lib
+from NeuralDialog_ZSDG.zsdg.nn_lib import IdentityConnector, Bi2UniConnector
+from NeuralDialog_ZSDG.zsdg.enc2dec.decoders import GEN
+from NeuralDialog_ZSDG.zsdg.models.models import PtrBase
+from NeuralDialog_ZSDG.zsdg.models.model_bases import BaseModel
 
 from enc2dec.elmo import ElmoEmbedding
 from enc2dec.encoders import ElmoUttEncoder
-from zsdg.enc2dec.decoders import DecoderPointerGen, DecoderRNN
+from NeuralDialog_ZSDG.zsdg.enc2dec.decoders import DecoderPointerGen, DecoderRNN
 
 class ElmoPtrBase(PtrBase):
     def __init__(self, config, corpus):

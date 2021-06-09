@@ -18,7 +18,7 @@ from NeuralDialog_ZSDG.zsdg.utils import str2bool, prepare_dirs_loggers, get_tim
 from NeuralDialog_ZSDG.zsdg import evaluators
 
 from models.models import LAPtrHRED, ZeroShotLAPtrHRED
-from zsdg.models.models import PtrHRED, ZeroShotPtrHRED
+from NeuralDialog_ZSDG.zsdg.models.models import PtrHRED, ZeroShotPtrHRED
 from utils import corpora
 
 arg_lists = []
@@ -165,6 +165,10 @@ def main(config):
     train_client = corpus_client_class(config)
     train_corpus = train_client.get_corpus()
     train_dial, valid_dial, test_dial = train_corpus['train'], train_corpus['valid'], train_corpus['test']
+    print(type(train_dial[0][2]))
+    print(len(train_dial[0][2]))
+    print(train_dial[0][2].keys())
+    print(train_dial[0][2])
 
     evaluator = evaluators.BleuEntEvaluator("SMD", train_client.ent_metas)
 
@@ -173,6 +177,14 @@ def main(config):
     train_feed = data_loader_class("Train", train_dial, config)
     valid_feed = data_loader_class("Valid", valid_dial, config)
     test_feed = data_loader_class("Test", test_dial, config)
+
+    done_epoch = 0
+    train_feed.epoch_init(config, verbose=done_epoch == 0, shuffle=True)
+    batch = train_feed.next_batch()
+    print(type(batch))
+    print(len(batch))
+    print(batch.keys())
+    stop
 
     model = get_model(config, train_client)
 

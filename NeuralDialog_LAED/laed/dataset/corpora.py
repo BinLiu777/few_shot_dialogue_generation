@@ -4,7 +4,7 @@ from __future__ import unicode_literals  # at top of module
 from collections import Counter
 import numpy as np
 import json
-from laed.utils import get_tokenize, get_chat_tokenize, missingdict, Pack
+from NeuralDialog_LAED.laed.utils import get_tokenize, get_chat_tokenize, missingdict, Pack
 import logging
 import os
 import itertools

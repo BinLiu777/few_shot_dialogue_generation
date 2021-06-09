@@ -3,8 +3,8 @@ from __future__ import print_function
 import numpy as np
 from allennlp.modules.elmo import batch_to_ids
 
-from zsdg.utils import Pack
-from zsdg.dataset.corpora import SYS, USR
+from NeuralDialog_ZSDG.zsdg.utils import Pack
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import SYS, USR
 
 from utils.dataloader_bases import DataLoader
 
@@ -442,7 +442,7 @@ class ZslLASMDDialDataLoader(DataLoader):
         # the batch index, the starting point and end point for segment
         rows = [self.data[idx] for idx in selected_index]
 
-        cxt_lens, ctx_utts, ctx_utts_raw = [], [], []
+        ctx_lens, ctx_utts, ctx_utts_raw = [], [], []
         out_utts, out_lens, out_utts_raw = [], [], []
         domains, domain_metas = [], []
 
@@ -463,7 +463,7 @@ class ZslLASMDDialDataLoader(DataLoader):
             for turn in in_row:
                 ctx_utts_raw.append(self.pad_to(self.max_utt_size, turn.utt_raw, pad_value=''))
 
-            cxt_lens.append(len(batch_ctx))
+            ctx_lens.append(len(batch_ctx))
             ctx_utts.append(batch_ctx)
 
             # target response
@@ -479,7 +479,7 @@ class ZslLASMDDialDataLoader(DataLoader):
         ctx_utts_raw = batch_to_ids(ctx_utts_raw)
 
         domain_metas = np.array(domain_metas)
-        vec_ctx_lens = np.array(cxt_lens)
+        vec_ctx_lens = np.array(ctx_lens)
         max_ctx_len = np.max(vec_ctx_lens)
         vec_ctx_utts = np.zeros((self.batch_size, max_ctx_len, self.max_utt_size), dtype=np.int32)
         vec_ctx_confs = np.ones((self.batch_size, max_ctx_len), dtype=np.float32)

@@ -9,10 +9,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import torch
 
-from laed.utils import Pack, get_tokenize
-from laed.dataset.corpora import *
-from zsdg.dataset.corpora import *
-from laed.models import sent_models, dialog_models
+from NeuralDialog_LAED.laed.utils import Pack, get_tokenize_zh
+from NeuralDialog_LAED.laed.dataset.corpora import *
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import *
+from NeuralDialog_LAED.laed.models import sent_models, dialog_models
 
 
 def save_vocab(in_vocab, in_vocab_file):
@@ -82,6 +82,118 @@ def load_model(in_model_folder, in_model_name, in_model_type, config=None, corpu
         laed_model.load_state_dict(torch.load(os.path.join(in_model_folder, 'model'), map_location='cpu'))
 
     return laed_model
+
+
+class LAEDCusSerCorpus(object):
+    logger = logging.getLogger()
+
+    def __init__(self, config):
+        self.config = config
+        self._path = config.data_dir[0]
+        self.max_utt_len = config.max_utt_len
+        # TODO: 修改tokenize()
+        self.tokenize = get_tokenize_zh()
+
+        self.train_corpus = self._read_file(os.path.join(self._path, 'customer_train.json'))
+        self.valid_corpus = self._read_file(os.path.join(self._path, 'customer_dev.json'))
+        self.test_corpus = self._read_file(os.path.join(self._path, 'customer_test.json'))
+
+        if hasattr(self.config, 'vocab') and self.config.vocab:
+            self.vocab, self.rev_vocab, self.unk_id = load_vocab(self.config.vocab)
+        else:
+            self._build_vocab(self.config.max_vocab_cnt)
+        print("Done loading corpus")
+
+    def _read_file(self, path):
+        with open(path, 'rb') as f:
+            data = json.load(f)
+        return self._process_dialogs(data, exclude_domains=self.config.exclude_domains)
+
+    def _process_dialogs(self, data, exclude_domains=[]):
+        new_dialog = []
+        bod_utt = [BOS, BOD, EOS]
+        eod_utt = [BOS, EOD, EOS]
+        all_lens = []
+        all_dialog_lens = []
+        speaker_map = {'assistant': SYS, 'driver': USR, '小鱼仔': SYS, '顾客': USR}
+        for raw_dialog in data:
+            domain = raw_dialog['scenario']['task']['intent']
+            if domain in exclude_domains:
+                continue
+            dialog = [Pack(utt=bod_utt, speaker=0, meta=None)]
+
+            for utt_idx, turn in enumerate(raw_dialog['dialogue']):
+                utt = turn['utterance']
+                author_type = turn['turn']
+                if self.config.include_domain:
+                    utt = [BOS, speaker_map[author_type], domain] + self.tokenize(utt) + [EOS]
+                else:
+                    utt = [BOS, speaker_map[author_type]] + self.tokenize(utt) + [EOS]
+                all_lens.append(len(utt))
+                dialog.append(Pack(utt=utt, speaker=speaker_map[author_type]))
+
+            if not hasattr(self.config, 'include_eod') or self.config.include_eod:
+                dialog.append(Pack(utt=eod_utt, speaker=0))
+
+            all_dialog_lens.append(len(dialog))
+            new_dialog.append(dialog)
+
+        print("Max utt len %d, mean utt len %.2f" % (np.max(all_lens), float(np.mean(all_lens))))
+        print("Max dialog len %d, mean dialog len %.2f" % (np.max(all_dialog_lens),
+                                                           float(np.mean(all_dialog_lens))))
+        return new_dialog
+
+    def _build_vocab(self, max_vocab_cnt):
+        all_words = []
+        for dialog in self.train_corpus:
+            for turn in dialog:
+                all_words.extend(turn.utt)
+
+        vocab_count = Counter(all_words).most_common()
+        raw_vocab_size = len(vocab_count)
+        discard_wc = np.sum([c for t, c, in vocab_count[max_vocab_cnt:]])
+        vocab_count = vocab_count[0: max_vocab_cnt]
+
+        # create vocabulary list sorted by count
+        print("Load corpus with train size %d, valid size %d, "
+              "test size %d raw vocab size %d vocab size %d at "
+              "cut_off %d OOV rate %f" % (len(self.train_corpus),
+                                          len(self.valid_corpus),
+                                          len(self.test_corpus),
+                                          raw_vocab_size,
+                                          len(vocab_count),
+                                          vocab_count[-1][1],
+                                          float(discard_wc) / len(all_words)))
+
+        self.vocab = [PAD, UNK, SYS, USR] + [t for t, cnt in vocab_count]
+        self.rev_vocab = {t: idx for idx, t in enumerate(self.vocab)}
+        self.unk_id = self.rev_vocab[UNK]
+        json_str = json.dumps(self.vocab)
+        with open('customer.json', 'w') as json_file:
+            json_file.write(json_str)
+
+
+    def _sent2id(self, sent):
+        return [self.rev_vocab.get(t, self.unk_id) for t in sent]
+
+    def _to_id_corpus(self, data):
+        results = []
+        for dialog in data:
+            temp = []
+            # convert utterance and feature into numeric numbers
+            for turn in dialog:
+                id_turn = Pack(utt=self._sent2id(turn.utt),
+                               speaker=turn.speaker,
+                               meta=turn.get('meta'))
+                temp.append(id_turn)
+            results.append(temp)
+        return results
+
+    def get_corpus(self):
+        id_train = self._to_id_corpus(self.train_corpus)
+        id_valid = self._to_id_corpus(self.valid_corpus)
+        id_test = self._to_id_corpus(self.test_corpus)
+        return Pack(train=id_train, valid=id_valid, test=id_test)
 
 
 class LAEDBlisCorpus(object):

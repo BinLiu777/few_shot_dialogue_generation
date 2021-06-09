@@ -13,6 +13,7 @@ import nltk
 import sys
 from collections import defaultdict
 from argparse import Namespace
+import jieba
 
 INT = 0
 LONG = 1
@@ -149,6 +150,16 @@ def get_dekenize():
 def get_tokenize():
     return nltk.RegexpTokenizer(r'\w+|#\w+|<\w+>|%\w+|[^\w\s]+').tokenize
 
+
+def get_tokenize_zh_(text):
+    # TODO:为了避免将单词切开，先将单词转为中文词，jieba分词后再转回。想更好办法解决
+    text = text.replace('<sil>', '静音')
+    res = list(jieba.cut(text))
+    res = ['<sil>' if x == '静音' else x for x in res]
+    return res
+
+def get_chat_tokenize_zh():
+    return get_tokenize_zh_
 
 def get_chat_tokenize():
     return nltk.RegexpTokenizer(r'\w+|<sil>|[^\w\s]+').tokenize

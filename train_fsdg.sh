@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES=2 python train_fsdg.py \
     LAZslStanfordCorpus \
-    --data_dir NeuralDialog_ZSDG/data/stanford \
+    --data_dir NeuralDialog_ZSDG/data/customer_service \
     --laed_z_folders laed_features/ae_ed laed_features/st_ed \
     --black_domains \$domain \
     --black_ratio 0.9 \

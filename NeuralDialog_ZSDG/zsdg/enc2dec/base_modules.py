@@ -1,11 +1,11 @@
 # @Time    : 9/20/17 2:10 PM
 # @Author  : Tiancheng Zhao
 import torch.nn as nn
-from zsdg.dataset.corpora import PAD, EOS
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import PAD, EOS
 import torch
 import torch
 from torch.autograd import Variable
-from zsdg.utils import FLOAT, cast_type
+from NeuralDialog_ZSDG.zsdg.utils import FLOAT, cast_type
 
 
 class BaseRNN(nn.Module):
