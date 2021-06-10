@@ -3,7 +3,7 @@ from __future__ import print_function
 import numpy as np
 from NeuralDialog_LAED.laed.utils import Pack
 from NeuralDialog_LAED.laed.dataset.dataloader_bases import DataLoader
-
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import SYS, USR
 
 # Stanford Multi Domain
 class SMDDataLoader(DataLoader):
@@ -26,6 +26,8 @@ class SMDDataLoader(DataLoader):
                 e_id = i
                 s_id = max(0, e_id - backward_size)
                 response = dialog[i].copy()
+                if response.speaker == USR:
+                    continue
                 response['utt'] = self.pad_to(self.max_utt_size, response.utt, do_pad=False)
                 contexts = []
                 for turn in dialog[s_id:e_id]:
