@@ -82,7 +82,7 @@ def train(model, train_feed, valid_feed, test_feed, config, evaluator, gen=None)
     if gen is None:
         gen = generate
 
-    patience = 10  # wait for at least 10 epoch before stop
+    patience = 100  # wait for at least 10 epoch before stop
     valid_loss_threshold = np.inf
     best_valid_loss = np.inf
     batch_cnt = 0
