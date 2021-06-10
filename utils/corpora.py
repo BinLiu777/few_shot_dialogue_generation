@@ -98,11 +98,11 @@ class LAEDCusSerCorpus(object):
         self.valid_corpus = self._read_file(os.path.join(self._path, 'customer_dev.json'))
         self.test_corpus = self._read_file(os.path.join(self._path, 'customer_test.json'))
 
-        if self.config.vocab != '':
+        if self.config.vocab != 'none':
             print(self.config.vocab != '')
             self.vocab, self.rev_vocab, self.unk_id = load_vocab(self.config.vocab)
         else:
-            self._build_vocab(self.config.max_vocab_cnt)
+            self._build_vocab(self.config.max_vocab_cnt, self.config.data_dir)
         print("Done loading corpus")
 
     def _read_file(self, path):
@@ -144,8 +144,9 @@ class LAEDCusSerCorpus(object):
                                                            float(np.mean(all_dialog_lens))))
         return new_dialog
 
-    def _build_vocab(self, max_vocab_cnt):
+    def _build_vocab(self, max_vocab_cnt, data_dir):
         all_words = []
+        corpus_name = data_dir.split('/')[-1]
         for dialog in self.train_corpus:
             for turn in dialog:
                 all_words.extend(turn.utt)
@@ -170,7 +171,7 @@ class LAEDCusSerCorpus(object):
         self.rev_vocab = {t: idx for idx, t in enumerate(self.vocab)}
         self.unk_id = self.rev_vocab[UNK]
         json_str = json.dumps(self.vocab)
-        with open('customer.json', 'w') as json_file:
+        with open(f'vocabs/{corpus_name}.json', 'w') as json_file:
             json_file.write(json_str)
 
 

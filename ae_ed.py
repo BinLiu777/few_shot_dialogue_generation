@@ -40,7 +40,7 @@ def get_config():
 data_arg = add_argument_group('Data')
 data_arg.add_argument('data_dir', nargs='+')
 data_arg.add_argument('corpus_client', help='LAEDBlisCorpus/StanfordCorpus')
-data_arg.add_argument('vocab', type=str)
+data_arg.add_argument('--vocab', type=str, default='none')
 data_arg.add_argument('--exclude_domains', nargs='*', default=[])
 data_arg.add_argument('--log_dir', type=str, default='logs')
 
@@ -108,6 +108,9 @@ logger = logging.getLogger()
 
 def main(config):
     corpus_client = getattr(corpora, config.corpus_client)(config)
+    if config.vocab == 'none':
+        corpus_name = config.data_dir.split('/')[-1]
+        config.vocab = f'vocabs/{corpus_name}.json'
     corpus_client.vocab, corpus_client.rev_vocab, corpus_client.unk_id = load_vocab(config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))
 
