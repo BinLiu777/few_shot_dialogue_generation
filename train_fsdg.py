@@ -184,6 +184,9 @@ def main(config):
     print(type(batch))
     print(len(batch))
     print(batch.keys())
+    for key in batch.keys():
+        print(key)
+        print(batch[key])
     stop
 
     model = get_model(config, train_client)
