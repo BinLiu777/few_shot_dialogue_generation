@@ -118,6 +118,10 @@ def main(config):
     train_dial, valid_dial, test_dial = (dial_corpus['train'],
                                          dial_corpus['valid'],
                                          dial_corpus['test'])
+    print(train_dial[0])
+    print(valid_dial[0])
+    print(test_dial[0])
+    stop
 
     evaluator = evaluators.BleuEvaluator('customer_service')
 
