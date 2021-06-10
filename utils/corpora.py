@@ -102,7 +102,7 @@ class LAEDCusSerCorpus(object):
             print(self.config.vocab != '')
             self.vocab, self.rev_vocab, self.unk_id = load_vocab(self.config.vocab)
         else:
-            self._build_vocab(self.config.max_vocab_cnt, self.config.data_dir)
+            self._build_vocab(self.config.max_vocab_cnt, self._path)
         print("Done loading corpus")
 
     def _read_file(self, path):
@@ -146,8 +146,7 @@ class LAEDCusSerCorpus(object):
 
     def _build_vocab(self, max_vocab_cnt, data_dir):
         all_words = []
-        print(data_dir)
-        corpus_name = data_dir.split('/')[-1]
+        corpus_name = data_dir[0].split('/')[-1]
         for dialog in self.train_corpus:
             for turn in dialog:
                 all_words.extend(turn.utt)

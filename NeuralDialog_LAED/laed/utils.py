@@ -154,6 +154,9 @@ def get_tokenize():
 def get_tokenize_zh_(text):
     # TODO:为了避免将单词切开，先将单词转为中文词，jieba分词后再转回。想更好办法解决
     # text = text.replace('<sil>', '静音')
+    intents = ['返学费规则', '随单礼品问题', '绘本售前咨询', '金额查询', '返学费进度', '修改级别问题', '其他绘本问题', '倒计时查询', '返学费申请', 'VIP/退款申请']
+    for intent in intents:
+        jieba.add_word(intent, tag='intent')
     res = list(jieba.cut(text))
     # res = ['<sil>' if x == '静音' else x for x in res]
     return res
@@ -168,4 +171,3 @@ def get_chat_tokenize():
 class missingdict(defaultdict):
     def __missing__(self, key):
         return self.default_factory()
-
