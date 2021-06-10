@@ -40,7 +40,7 @@ def get_config():
 data_arg = add_argument_group('Data')
 data_arg.add_argument('data_dir', nargs='+')
 data_arg.add_argument('corpus_client', help='LAEDBlisCorpus/StanfordCorpus')
-data_arg.add_argument('vocab', type=str)
+data_arg.add_argument('--vocab', type=str, default='none')
 data_arg.add_argument('--exclude_domains', nargs='*', default=[])
 data_arg.add_argument('--log_dir', type=str, default='logs')
 
@@ -81,7 +81,7 @@ train_arg.add_argument('--dropout', type=float, default=0.3)
 train_arg.add_argument('--improve_threshold', type=float, default=0.996)
 train_arg.add_argument('--patient_increase', type=float, default=2.0)
 train_arg.add_argument('--early_stop', type=str2bool, default=True)
-train_arg.add_argument('--max_epoch', type=int, default=50)
+train_arg.add_argument('--max_epoch', type=int, default=1000)
 train_arg.add_argument('--loss_type', type=str, default="e2e")
 train_arg.add_argument('--include_eod', type=str2bool, default=True)
 train_arg.add_argument('--include_domain', type=str2bool, default=True)
@@ -91,7 +91,7 @@ misc_arg = add_argument_group('Misc')
 misc_arg.add_argument('--save_model', type=str2bool, default=True)
 misc_arg.add_argument('--use_gpu', type=str2bool, default=True)
 misc_arg.add_argument('--fix_batch', type=str2bool, default=False)
-misc_arg.add_argument('--print_step', type=int, default=200)
+misc_arg.add_argument('--print_step', type=int, default=500)
 misc_arg.add_argument('--ckpt_step', type=int, default=1000)
 misc_arg.add_argument('--freeze_step', type=int, default=5000)
 misc_arg.add_argument('--batch_size', type=int, default=30)
@@ -106,6 +106,9 @@ logger = logging.getLogger()
 
 def main(config):
     corpus_client = getattr(corpora, config.corpus_client)(config)
+    if config.vocab == 'none':
+        corpus_name = config.data_dir[0].split('/')[-1]
+        config.vocab = f'vocabs/{corpus_name}.json'
     corpus_client.vocab, corpus_client.rev_vocab, corpus_client.unk_id = load_vocab(config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))
 
@@ -114,7 +117,7 @@ def main(config):
                                          dial_corpus['valid'],
                                          dial_corpus['test'])
 
-    evaluator = evaluators.BleuEvaluator("CornellMovie")
+    evaluator = evaluators.BleuEvaluator('customer_service')
 
     # create data loader that feed the deep models
     train_feed = data_loaders.SMDDialogSkipLoader("Train", train_dial, config)
@@ -160,11 +163,11 @@ def main(config):
         selected_outs = dialog_utils.selective_generate(model, test_feed, config, selected_clusters)
         print(len(selected_outs))
 
-    with open(os.path.join(dump_file+'.json'), 'w') as f:
-        json.dump(selected_clusters, f, indent=2)
+        with open(os.path.join(dump_file+'.json'), 'w') as f:
+            json.dump(selected_clusters, f, indent=2)
 
-    with open(os.path.join(dump_file+'.out.json'), 'w') as f:
-        json.dump(selected_outs, f, indent=2)
+        with open(os.path.join(dump_file+'.out.json'), 'w') as f:
+            json.dump(selected_outs, f, indent=2)
 
     with open(os.path.join(dump_file), "wb") as f:
         print("Dumping test to {}".format(dump_file))

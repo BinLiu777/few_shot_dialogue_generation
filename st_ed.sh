@@ -1,4 +1,4 @@
 CUDA_VISIBLE_DEVICES=1 python st_ed.py \
-    metalwoz-v1 \
+    data/customer_service \
     LAEDCusSerCorpus \
-    vocabs/maluuba.json
+    --vocab vocabs/customer_service.json

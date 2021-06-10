@@ -46,7 +46,6 @@ data_arg.add_argument('--log_dir', type=str, default='logs')
 
 # Network
 net_arg = add_argument_group('Network')
-net_arg = add_argument_group('Network')
 net_arg.add_argument('--use_reg_kl', type=str2bool, default=True)
 net_arg.add_argument('--use_attribute', type=str2bool, default=True)
 net_arg.add_argument('--y_size', type=int, default=10)
@@ -66,7 +65,6 @@ net_arg.add_argument('--num_layer', type=int, default=1)
 net_arg.add_argument('--use_attn', type=str2bool, default=False)
 net_arg.add_argument('--attn_type', type=str, default='cat')
 net_arg.add_argument('--greedy_q', type=str2bool, default=True)
-
 
 # Training / test parameters
 train_arg = add_argument_group('Training')
@@ -92,10 +90,10 @@ train_arg.add_argument('--include_domain', type=str2bool, default=True)
 misc_arg = add_argument_group('Misc')
 misc_arg.add_argument('--save_model', type=str2bool, default=True)
 misc_arg.add_argument('--use_gpu', type=str2bool, default=True)
-misc_arg.add_argument('--print_step', type=int, default=500)
 misc_arg.add_argument('--fix_batch', type=str2bool, default=False)
-misc_arg.add_argument('--train_prior', type=str2bool, default=False)
+misc_arg.add_argument('--print_step', type=int, default=500)
 misc_arg.add_argument('--ckpt_step', type=int, default=2000)
+misc_arg.add_argument('--train_prior', type=str2bool, default=False)
 misc_arg.add_argument('--batch_size', type=int, default=30)
 misc_arg.add_argument('--preview_batch_num', type=int, default=1)
 misc_arg.add_argument('--gen_type', type=str, default='greedy')

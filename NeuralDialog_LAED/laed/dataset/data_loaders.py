@@ -94,11 +94,11 @@ class SMDDialogSkipLoader(DataLoader):
             for i in range(1, len(dialog)-1):
                 e_id = i
                 s_id = max(0, e_id - backward_size)
-
-                response = dialog[i]
-                prev = dialog[i - 1]
-                next = dialog[i + 1]
-
+                response = dialog[i].copy()
+                prev = dialog[i - 1].copy()
+                next = dialog[i + 1].copy()
+                if response.speaker == USR:
+                    continue
                 response['utt'] = self.pad_to(self.max_utt_size, response.utt, do_pad=False)
                 prev['utt'] = self.pad_to(self.max_utt_size, prev.utt, do_pad=False)
                 next['utt'] = self.pad_to(self.max_utt_size, next.utt, do_pad=False)
