@@ -1,8 +1,8 @@
 #    Copyright (C) 2017 Tiancheng Zhao, Carnegie Mellon University
 from __future__ import print_function
 import numpy as np
-from laed.utils import Pack
-from laed.dataset.dataloader_bases import DataLoader
+from NeuralDialog_LAED.laed.utils import Pack
+from NeuralDialog_LAED.laed.dataset.dataloader_bases import DataLoader
 
 
 # Stanford Multi Domain
