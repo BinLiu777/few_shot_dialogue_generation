@@ -109,7 +109,7 @@ logger = logging.getLogger()
 def main(config):
     corpus_client = getattr(corpora, config.corpus_client)(config)
     if config.vocab == 'none':
-        corpus_name = config.data_dir.split('/')[-1]
+        corpus_name = config.data_dir[0].split('/')[-1]
         config.vocab = f'vocabs/{corpus_name}.json'
     corpus_client.vocab, corpus_client.rev_vocab, corpus_client.unk_id = load_vocab(config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))

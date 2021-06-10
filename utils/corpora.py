@@ -146,7 +146,7 @@ class LAEDCusSerCorpus(object):
 
     def _build_vocab(self, max_vocab_cnt, data_dir):
         all_words = []
-        corpus_name = data_dir[0].split('/')[-1]
+        corpus_name = data_dir.split('/')[-1]
         for dialog in self.train_corpus:
             for turn in dialog:
                 all_words.extend(turn.utt)
