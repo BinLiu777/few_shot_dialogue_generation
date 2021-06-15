@@ -33,6 +33,7 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
     batch_cnt = 0
     while True:
         batch_cnt += 1
+        print('batch_cnt: ', batch_cnt)
         batch = data_feed.next_batch()
         # print(batch['contexts'])
         # print(batch['outputs'])
