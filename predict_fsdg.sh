@@ -1,4 +1,4 @@
-python predict_fsdg.py \
+CUDA_VISIBLE_DEVICES=2 python predict_fsdg.py \
     LAZslStanfordCorpus \
     --data_dir NeuralDialog_ZSDG/data/stanford\
     --laed_z_folders laed_features/st_ed \
