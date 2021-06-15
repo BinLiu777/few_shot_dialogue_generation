@@ -2,11 +2,11 @@
 # @Author  : Tiancheng Zhao
 from __future__ import print_function
 
-from zsdg import utils
+from NeuralDialog_ZSDG.zsdg import utils
 import numpy as np
-from zsdg.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN, DecoderPointerGen
+from NeuralDialog_ZSDG.zsdg.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN, DecoderPointerGen
 import logging
-from zsdg.main import get_sent
+from NeuralDialog_ZSDG.zsdg.main import get_sent
 import pickle
 import os
 
@@ -34,6 +34,11 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
     while True:
         batch_cnt += 1
         batch = data_feed.next_batch()
+        # print(batch['contexts'])
+        # print(batch['outputs'])
+        # print(len(batch['contexts']))
+        # print(len(batch['outputs']))
+        # stop
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
             break

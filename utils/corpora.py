@@ -794,6 +794,7 @@ class LAZslStanfordCorpus(object):
                                                        self.laed_z['test'])
 
         self.domains = set([dialog[0].domain for dialog in self.train_corpus])
+        # self.domains = set([dialog[0].domain for dialog in self.test_corpus])
 
         with open(os.path.join(self._path, 'kvret_entities.json'), 'rb') as f:
             self.ent_metas = json.load(f)

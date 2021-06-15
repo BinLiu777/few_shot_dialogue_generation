@@ -2,11 +2,11 @@
 # author: Tiancheng Zhao
 from __future__ import print_function
 import numpy as np
-from zsdg.models.model_bases import summary
+from NeuralDialog_ZSDG.zsdg.models.model_bases import summary
 import torch
-from zsdg.dataset.corpora import PAD, EOS, EOT
-from zsdg.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN, DecoderPointerGen
-from zsdg.utils import get_dekenize
+from NeuralDialog_ZSDG.zsdg.dataset.corpora import PAD, EOS, EOT
+from NeuralDialog_ZSDG.zsdg.enc2dec.decoders import TEACH_FORCE, GEN, DecoderRNN, DecoderPointerGen
+from NeuralDialog_ZSDG.zsdg.utils import get_dekenize
 import os
 from collections import defaultdict
 import logging
