@@ -100,8 +100,8 @@ def main(config):
     if config.vocab:
         corpus_client.vocab, corpus_client.rev_vocab, corpus_client.unk_token = load_vocab(config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))
-
     dial_corpus = corpus_client.get_corpus()
+    stop
     # train_dial, valid_dial, test_dial = dial_corpus['train'], dial_corpus['valid'], dial_corpus['test']
     # all_dial = train_dial + valid_dial + test_dial
     # all_utts = reduce(lambda x, y: x + y, all_dial, [])

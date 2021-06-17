@@ -165,6 +165,10 @@ def main(config):
     train_client = corpus_client_class(config)
     train_corpus = train_client.get_corpus()
     test_dial = train_corpus['test']
+    print(test_dial[1])
+    print()
+    stop
+
 
     evaluator = evaluators.BleuEntEvaluator("SMD", train_client.ent_metas)
 

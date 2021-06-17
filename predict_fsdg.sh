@@ -1,5 +1,4 @@
-CUDA_VISIBLE_DEVICES=0 python predict_fsdg.py \
-    LAZslStanfordCorpus \
+python predict_fsdg.py \
     --data_dir NeuralDialog_ZSDG/data/stanford\
     --laed_z_folders laed_features/st_ed \
     --black_domains \

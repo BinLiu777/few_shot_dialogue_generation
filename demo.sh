@@ -1,4 +1,4 @@
-python generate_laed_features.py \
+python demo.py \
     logs/2021-06-07T10-35-18-st_ed.py \
     laed_featuress/st_ed \
     --model_name StED \

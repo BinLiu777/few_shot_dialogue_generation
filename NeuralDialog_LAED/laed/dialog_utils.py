@@ -8,10 +8,10 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 import torch
 
-from laed import main as engine
-from laed.enc2dec.decoders import GEN, DecoderRNN, TEACH_FORCE
-from laed import utils
-from laed.dataset.corpora import PAD, EOS, EOT, USR, SYS
+from NeuralDialog_LAED.laed import main as engine
+from NeuralDialog_LAED.laed.enc2dec.decoders import GEN, DecoderRNN, TEACH_FORCE
+from NeuralDialog_LAED.laed import utils
+from NeuralDialog_LAED.laed.dataset.corpora import PAD, EOS, EOT, USR, SYS
 
 
 
@@ -185,6 +185,7 @@ def dump_latent(model, data_feed, config, dest_f, num_batch=1):
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
             break
+
         results = model(batch, mode=TEACH_FORCE, return_latent=True)
         labels = batch.outputs
         ctx = batch.contexts

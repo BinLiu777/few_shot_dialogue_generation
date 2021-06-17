@@ -733,11 +733,267 @@ class ZslStanfordCorpus(object):
                                       self.valid_corpus,
                                       use_black_list=False,
                                       domains=real_domains)
+        for utt in self.test_corpus[0]:
+            print(utt)
         id_test = self._to_id_corpus("Test",
                                      self.test_corpus,
                                      use_black_list=False,
                                      domains=real_domains)
         return Pack(train=id_train, valid=id_valid, test=id_test)
+
+    def get_seed_responses(self, utt_cnt=defaultdict(lambda: 100)):
+        domain_seeds = defaultdict(list)
+        all_domains = []
+        if sum(utt_cnt.values()) == 0 or self.config.action_match is False:
+            return []
+
+        for resp in self.domain_descriptions:
+            if resp.empty_action:
+                continue
+            resp_copy = resp.copy()
+            resp_copy['utt_raw'] = resp.utt
+            resp_copy['actions_raw'] = resp.actions
+            resp_copy['domain_raw'] = resp.domain
+            resp_copy['utt'] = self._sent2id(resp.utt)
+            resp_copy['actions'] = self._sent2id(resp.actions)
+            resp_copy['domain_id'] = self.rev_vocab[resp.domain]
+            if len(domain_seeds[resp.domain]) >= utt_cnt[resp.domain]:
+                continue
+
+            domain_seeds[resp.domain].append(resp_copy)
+            all_domains.append(resp.domain)
+
+        seed_responses = []
+        for v in domain_seeds.values():
+            seed_responses.extend(v)
+
+        self.logger.info("Collected {} extra samples".format(len(seed_responses)))
+        self.logger.info(Counter(all_domains).most_common())
+        return seed_responses
+
+
+class ZslStanfordCorpusPre(object):
+    logger = logging.getLogger(__name__)
+
+    def __init__(self, config):
+        self.config = config
+        self._path = config.data_dir[0]
+        self.max_utt_len = config.max_utt_len
+        self.tokenize = get_tokenize()
+        self.speaker_map = {'assistant': SYS, 'driver': USR}
+        self.domain_descriptions = []
+
+        self.domains = {'weather', 'navigate', 'schedule'}
+
+        # self._build_vocab()
+        # print("Done loading corpus")
+
+    def add_test_data(self, data):
+        # TODO:现在是每次都重新生成一组新数据，而不是增加每轮的新utt
+        self.test_corpus = self._process_dialog(data)
+
+    def _lowercase_json(self, in_json):
+        return json.loads(json.dumps(in_json).lower())
+
+    def _read_file(self, path):
+        with open(path, 'rb') as f:
+            data = json.load(f)
+            if self.config.lowercase:
+                data = self._lowercase_json(data)
+
+        return self._process_dialog(data)
+
+    def _read_domain_descriptions_annotated(self, path):
+        # read all domains
+        seed_responses = []
+
+        def _read_file(domain):
+            with open(os.path.join(path, 'domain_descriptions/{}.tsv'.format(domain)), 'rb') as f:
+                lines = f.readlines()
+                for l in lines[1:]:
+                    tokens = l.lower().split('\t')
+                    if tokens[2] == "":
+                        break
+                    utt = tokens[1]
+                    speaker = tokens[0]
+                    action = tokens[3]
+                    if self.config.include_domain:
+                        utt = [BOS, self.speaker_map[speaker], domain] + self.tokenize(utt) + [EOS]
+                        action = [BOS, self.speaker_map[speaker], domain] + self.tokenize(action) + [EOS]
+                    else:
+                        utt = [BOS, self.speaker_map[speaker]] + self.tokenize(utt) + [EOS]
+                        action = [BOS, self.speaker_map[speaker]] + self.tokenize(action) + [EOS]
+
+                    seed_responses.append(Pack(domain=domain,
+                                               speaker=speaker,
+                                               utt=utt,
+                                               actions=action))
+
+        _read_file('navigate')
+        _read_file('schedule')
+        _read_file('weather')
+        return seed_responses
+
+    def _read_domain_descriptions_kb(self, path):
+        # read all domains
+        seed_responses = []
+
+        with open(os.path.join(path, 'kb_seed_data.json')) as kb_data_in:
+            kb_data = json.load(kb_data_in)
+        for domain, turns in kb_data.items():
+            for turn in turns:
+                if self.config.include_domain:
+                    utt = [BOS, self.speaker_map[turn['agent']], domain] + self.tokenize(turn['utterance']) + [EOS]
+                    kb = [BOS, self.speaker_map[turn['agent']], domain] + self.tokenize(turn['kb']) + [EOS]
+                else:
+                    utt = [BOS, self.speaker_map[turn['agent']]] + self.tokenize(turn['utterance']) + [EOS]
+                    kb = [BOS, self.speaker_map[turn['agent']]] + self.tokenize(turn['kb']) + [EOS]
+
+                seed_responses.append(Pack(domain=domain, speaker=turn['agent'], utt=utt, actions=kb))
+        return seed_responses
+
+    def _process_dialog(self, data):
+        new_dialog = []
+        all_lens = []
+        all_dialog_lens = []
+        for raw_dialog in data:
+            domain = raw_dialog['scenario']['task']['intent']
+            kb_items = []
+            if raw_dialog['scenario']['kb']['items'] is not None:
+                for item in raw_dialog['scenario']['kb']['items']:
+                    kb_items.append([KB]+self.tokenize(" ".join(["{} {}".format(k, v) for k, v in item.items()])))
+
+            dialog = [Pack(utt=[BOS, domain, BOD, EOS], speaker=USR, slots=None, domain=domain)]
+            for turn in raw_dialog['dialogue']:
+                utt = turn['data']['utterance']
+                slots = turn['data'].get('slots')
+                speaker = self.speaker_map[turn['turn']]
+                if self.config.include_domain:
+                    utt = [BOS, speaker, domain] + self.tokenize(utt) + [EOS]
+                else:
+                    utt = [BOS, speaker] + self.tokenize(utt) + [EOS]
+
+                all_lens.append(len(utt))
+                if speaker == SYS:
+                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=kb_items))
+                else:
+                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=[]))
+                self._process_domain_description(turn, domain)
+
+            all_dialog_lens.append(len(dialog))
+            new_dialog.append(dialog)
+
+        print("Max utt len %d, mean utt len %.2f" % (
+            np.max(all_lens), float(np.mean(all_lens))))
+        print("Max dialog len %d, mean dialog len %.2f" % (
+            np.max(all_dialog_lens), float(np.mean(all_dialog_lens))))
+        return new_dialog
+
+    def _process_domain_description(self, in_turn, in_domain):
+        utt = in_turn['data']['utterance']
+        speaker = self.speaker_map[in_turn['turn']]
+
+        action = []
+        nlu_dict = in_turn['data'].get('nlu', {}).get('annotations', {})
+        if 'ner' in nlu_dict:
+            action += flatten_nlu_dict(nlu_dict['ner'])
+        if 'entity_linking' in nlu_dict:
+            for key, value in nlu_dict['entity_linking'].items():
+                actual_value = value
+                if type(value) == list:
+                    actual_value = value[0]
+                action.append(actual_value['entity'])
+        if 'SUTime' in nlu_dict:
+            for item in nlu_dict['SUTime']:
+                action.append(item['text'])
+        action = ' '.join(action)
+        empty_action = not len(action.strip())
+        if self.config.include_domain:
+            utt = [BOS, speaker, in_domain] + self.tokenize(utt) + [EOS]
+            action = [BOS, speaker, in_domain] + self.tokenize(action) + [EOS]
+        else:
+            utt = [BOS, speaker] + self.tokenize(utt) + [EOS]
+            action = [BOS, speaker] + self.tokenize(action) + [EOS]
+        self.domain_descriptions.append(Pack(domain=in_domain,
+                                             speaker=speaker,
+                                             utt=utt,
+                                             actions=action,
+                                             empty_action=empty_action))
+
+    def _build_vocab(self):
+        all_words = []
+        for dialog in self.train_corpus:
+            for turn in dialog:
+                all_words.extend(turn.utt)
+                for item in turn.get('kb', []):
+                    all_words.extend(item)
+
+        for resp in self.domain_descriptions:
+            all_words.extend(resp.actions)
+
+        vocab_count = Counter(all_words).most_common()
+        raw_vocab_size = len(vocab_count)
+        discard_wc = np.sum([c for t, c, in vocab_count])
+
+        # create vocabulary list sorted by count
+        print("Load corpus with train size %d, valid size %d, "
+              "test size %d raw vocab size %d vocab size %d at cut_off %d OOV rate %f"
+              % (len(self.train_corpus), len(self.valid_corpus),
+                 len(self.test_corpus),
+                 raw_vocab_size, len(vocab_count), vocab_count[-1][1],
+                 float(discard_wc) / len(all_words)))
+
+        self.vocab = [PAD, UNK, SYS, USR] + [t for t, cnt in vocab_count]
+        self.rev_vocab = {t: idx for idx, t in enumerate(self.vocab)}
+        self.unk_id = self.rev_vocab[UNK]
+
+    def _sent2id(self, sent):
+        return [self.rev_vocab.get(t, self.unk_id) for t in sent]
+
+    def _to_id_corpus(self, name, data, use_black_list, domains):
+        results = []
+        kick_cnt = 0
+        domain_cnt = []
+        for dialog in data:
+            if len(dialog) < 1:
+                continue
+            domain = dialog[0].domain
+            if domain not in domains:
+                continue
+            should_filter = np.random.rand() < self.black_ratio
+            if use_black_list and self.black_domains \
+                    and domain in self.black_domains \
+                    and should_filter:
+                kick_cnt += 1
+                continue
+            temp = []
+            # convert utterance and feature into numeric numbers
+            for turn in dialog:
+                id_turn = Pack(utt=self._sent2id(turn.utt),
+                               utt_raw=turn.utt,
+                               speaker=turn.speaker,
+                               domain=turn.domain,
+                               domain_id=self.rev_vocab[domain],
+                               meta=turn.get('meta'),
+                               kb=[self._sent2id(item) for item in turn.get('kb', [])],
+                               kb_raw=turn.get('kb', []))
+                temp.append(id_turn)
+
+            results.append(temp)
+            domain_cnt.append(domain)
+        self.logger.info("Filter {} samples from {}".format(kick_cnt, name))
+        self.logger.info(Counter(domain_cnt).most_common())
+        return results
+
+    def get_corpus(self, domains=None):
+        real_domains = domains if domains else self.domains
+        for utt in self.test_corpus[0]:
+            print(utt)
+        id_test = self._to_id_corpus("Test",
+                                     self.test_corpus,
+                                     use_black_list=False,
+                                     domains=real_domains)
+        return Pack(test=id_test)
 
     def get_seed_responses(self, utt_cnt=defaultdict(lambda: 100)):
         domain_seeds = defaultdict(list)
