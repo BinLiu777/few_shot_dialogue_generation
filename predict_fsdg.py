@@ -165,10 +165,6 @@ def main(config):
     train_client = corpus_client_class(config)
     train_corpus = train_client.get_corpus()
     test_dial = train_corpus['test']
-    print(test_dial[1])
-    print()
-    stop
-
 
     evaluator = evaluators.BleuEntEvaluator("SMD", train_client.ent_metas)
 
@@ -184,9 +180,7 @@ def main(config):
     model_file = os.path.join(config.log_dir, config.load_sess, "model")
 
     config.batch_size = 20
-
-    # from torchsummary import summary
-    # summary(model, input_size=())
+    config.use_gpu = False
 
     if config.use_gpu:
         model.cuda()

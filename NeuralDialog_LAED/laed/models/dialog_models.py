@@ -3,16 +3,16 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from laed.dataset.corpora import PAD, BOS, EOS
+from NeuralDialog_LAED.laed.dataset.corpora import PAD, BOS, EOS
 from torch.autograd import Variable
-from laed import criterions
-from laed.enc2dec.decoders import DecoderRNN
-from laed.enc2dec.encoders import EncoderRNN, RnnUttEncoder
-from laed.utils import INT, FLOAT, LONG, cast_type
-from laed import nn_lib
-from laed.models.model_bases import BaseModel
-from laed.enc2dec.decoders import GEN, TEACH_FORCE
-from laed.utils import Pack
+from NeuralDialog_LAED.laed import criterions
+from NeuralDialog_LAED.laed.enc2dec.decoders import DecoderRNN
+from NeuralDialog_LAED.laed.enc2dec.encoders import EncoderRNN, RnnUttEncoder
+from NeuralDialog_LAED.laed.utils import INT, FLOAT, LONG, cast_type
+from NeuralDialog_LAED.laed import nn_lib
+from NeuralDialog_LAED.laed.models.model_bases import BaseModel
+from NeuralDialog_LAED.laed.enc2dec.decoders import GEN, TEACH_FORCE
+from NeuralDialog_LAED.laed.utils import Pack
 import itertools
 import numpy as np
 
@@ -394,7 +394,8 @@ class AeED(LAED):
 
         # compute loss or return results
         if mode == GEN:
-            return dec_ctx, labels
+            return y_id
+            # return dec_ctx, labels
         else:
             # VAE-related Losses
             log_qy = F.log_softmax(vae_resp.qy_logits, dim=1)

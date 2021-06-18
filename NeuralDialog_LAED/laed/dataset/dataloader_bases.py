@@ -29,9 +29,11 @@ class DataLoader(object):
     def epoch_init(self, config, shuffle=True, verbose=True):
         self.ptr = 0
         self.batch_size = config.batch_size
+        # print(self.batch_size)
         self.num_batch = self.data_size // config.batch_size
-        if verbose:
-            self.logger.info("Number of left over sample %d" % (self.data_size - config.batch_size * self.num_batch))
+        # print(self.num_batch)
+        # if verbose:
+        #     self.logger.info("Number of left over sample %d" % (self.data_size - config.batch_size * self.num_batch))
 
         # if shuffle and we want to group lines, shuffle batch indexes
         if shuffle and not self.fix_batch:
@@ -44,8 +46,8 @@ class DataLoader(object):
         if shuffle and self.fix_batch:
             self._shuffle_batch_indexes()
 
-        if verbose:
-            self.logger.info("%s begins with %d batches" % (self.name, self.num_batch))
+        # if verbose:
+        #     self.logger.info("%s begins with %d batches" % (self.name, self.num_batch))
 
     def next_batch(self):
         if self.ptr < self.num_batch:

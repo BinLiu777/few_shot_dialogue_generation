@@ -1,6 +1,6 @@
 python predict_fsdg.py \
     --data_dir NeuralDialog_ZSDG/data/stanford\
-    --laed_z_folders laed_features/st_ed \
+    --laed_z_folders laed_features/ae_ed \
     --black_domains \
     --black_ratio 0.9 \
     --action_match False \
