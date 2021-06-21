@@ -386,6 +386,7 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
             e_id = len(dialog)
             s_id = max(0, e_id - backward_size)
             response = dialog[0].copy()
+            # print(response)
             response['utt'] = self.pad_to(self.max_utt_size, response.utt, do_pad=False)
             response['utt_raw'] = self.pad_to(self.max_utt_size, response.utt_raw, do_pad=False)
             response['kb'] = [self.pad_to(self.max_utt_size, item, do_pad=True) for item in response.kb]
@@ -648,6 +649,8 @@ class ZslLASMDDialDataLoader(DataLoader):
 
             ctx_lens.append(len(batch_ctx))
             ctx_utts.append(batch_ctx)
+            print(ctx_utts)
+            stop
 
             # target response
             out_utt = [t for idx, t in enumerate(out_row.utt)]
