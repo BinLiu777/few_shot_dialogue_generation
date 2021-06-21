@@ -119,7 +119,7 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
         print(batch.keys())
         for k in batch.keys():
             if k != 'domains' and k !='contexts_elmo':
-                print(batch[k][0])
+                print(k, batch[k].shape, batch[k][0])
         stop
         # print(batch['outputs'])
         # print(len(batch['contexts']))
