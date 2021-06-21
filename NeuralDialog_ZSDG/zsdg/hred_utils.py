@@ -116,12 +116,11 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
         batch_cnt += 1
         print('batch_cnt: ', batch_cnt)
         batch = data_feed.next_batch()
-        print(batch)
+        print(batch.keys())
+        for k in batch.keys():
+            if k != 'domains':
+                print(batch[k].shape)
         stop
-        # print(batch.keys())
-        # for k in batch.keys():
-        #     if k != 'domains':
-        #         print(batch[k].shape)
         # print(batch['outputs'])
         # print(len(batch['contexts']))
         # print(len(batch['outputs']))
