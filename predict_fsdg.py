@@ -180,7 +180,7 @@ def main(config):
     model_file = os.path.join(config.log_dir, config.load_sess, "model")
 
     config.batch_size = 20
-    config.use_gpu = False
+    # config.use_gpu = False
 
     if config.use_gpu:
         model.cuda()
