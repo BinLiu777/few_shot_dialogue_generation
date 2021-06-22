@@ -862,11 +862,12 @@ class ZslStanfordCorpusPre(object):
                 for item in raw_dialog['scenario']['kb']['items']:
                     kb_items.append([KB]+self.tokenize(" ".join(["{} {}".format(k, v) for k, v in item.items()])))
 
-            dialog = [Pack(utt=[BOS, domain, BOD, EOS], speaker=USR, slots=None, domain=domain)]
+            dialog = [Pack(utt=[BOS, domain, BOD, EOS], speaker=USR, slots=None, domain=domain, kb=kb_items)]
             for turn in raw_dialog['dialogue']:
                 utt = turn['data']['utterance']
                 slots = turn['data'].get('slots')
                 speaker = self.speaker_map[turn['turn']]
+
                 if self.config.include_domain:
                     utt = [BOS, speaker, domain] + self.tokenize(utt) + [EOS]
                 else:
@@ -876,7 +877,7 @@ class ZslStanfordCorpusPre(object):
                 if speaker == SYS:
                     dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=kb_items))
                 else:
-                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=[]))
+                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=kb_items))
                 self._process_domain_description(turn, domain)
 
             all_dialog_lens.append(len(dialog))
@@ -1316,6 +1317,7 @@ class LAZslStanfordCorpusPre(object):
         self.tokenize = get_tokenize()
         self.speaker_map = {'assistant': SYS, 'driver': USR}
         self.domain_descriptions = []
+        self.domains = {'weather', 'navigate', 'schedule'}
 
         # self._load_laed_z()
         self.laed_z_size = config.laed_z_size
@@ -1338,7 +1340,6 @@ class LAZslStanfordCorpusPre(object):
     def add_test_data(self, data, features):
         # TODO:现在是每次都重新生成一组新数据，而不是增加每轮的新utt
         self.test_corpus = self._process_dialog(data, features)
-        self.domains = {'weather', 'navigate', 'schedule'}
 
     def _lowercase_json(self, in_json):
         return json.loads(json.dumps(in_json).lower())
@@ -1393,7 +1394,7 @@ class LAZslStanfordCorpusPre(object):
                 for item in raw_dialog['scenario']['kb']['items']:
                     kb_items.append([KB]+self.tokenize(" ".join(["{} {}".format(k, v) for k, v in item.items()])))
 
-            dialog = [Pack(utt=[BOS, domain, BOD, EOS], speaker=USR, slots=None, domain=domain)]
+            dialog = [Pack(utt=[BOS, domain, BOD, EOS], speaker=USR, slots=None, domain=domain, kb=kb_items)]
             for turn, laed_z_turn in zip(raw_dialog['dialogue'], laed_z):
                 utt = turn['data']['utterance']
                 slots = turn['data'].get('slots')
@@ -1407,7 +1408,7 @@ class LAZslStanfordCorpusPre(object):
                 if speaker == SYS:
                     dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=kb_items))
                 else:
-                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=[]))
+                    dialog.append(Pack(utt=utt, speaker=speaker, slots=slots, domain=domain, kb=kb_items))
                 self._process_domain_description(turn, domain, laed_z_turn)
 
             all_dialog_lens.append(len(dialog))

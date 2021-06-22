@@ -30,6 +30,222 @@ arg_lists = []
 parser = argparse.ArgumentParser()
 logger = logging.getLogger()
 
+navigate = {
+    "items": [
+        {
+            "poi": "Stanford Express Care",
+            "distance": "3 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "hospital",
+            "address": "214 El Camino Real"
+        },
+        {
+            "poi": "The Clement Hotel",
+            "distance": "5 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "rest stop",
+            "address": "657 Ames Ave"
+        },
+        {
+            "poi": "Comfort Inn",
+            "distance": "5 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "rest stop",
+            "address": "753 University Ave"
+        },
+        {
+            "poi": "toms house",
+            "distance": "1 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "friends house",
+            "address": "580 Van Ness Ave"
+        },
+        {
+            "poi": "Stanford Oval Parking",
+            "distance": "5 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "parking garage",
+            "address": "610 Amarillo Ave"
+        },
+        {
+            "poi": "jacks house",
+            "distance": "6 miles",
+            "traffic_info": "no traffic",
+            "poi_type": "friends house",
+            "address": "864 Almanor Ln"
+        },
+        {
+            "poi": "5672 barringer street",
+            "distance": "5 miles",
+            "traffic_info": "heavy traffic",
+            "poi_type": "certain address",
+            "address": "5672 barringer street"
+        }
+    ],
+    "column_names": [
+        "poi",
+        "poi_type",
+        "address",
+        "distance",
+        "traffic_info"
+    ],
+    "kb_title": "location information"
+}
+weather = {
+    "items": [
+      {
+        "monday": "windy, low of 60F, high of 80F",
+        "tuesday": "dry, low of 60F, high of 70F",
+        "friday": "overcast, low of 50F, high of 60F",
+        "wednesday": "dew, low of 50F, high of 70F",
+        "thursday": "cloudy, low of 50F, high of 60F",
+        "sunday": "dew, low of 30F, high of 50F",
+        "location": "downtown chicago",
+        "saturday": "foggy, low of 20F, high of 30F",
+        "today": "monday"
+      },
+      {
+        "monday": "rain, low of 20F, high of 40F",
+        "tuesday": "overcast, low of 30F, high of 50F",
+        "friday": "hot, low of 70F, high of 90F",
+        "wednesday": "overcast, low of 80F, high of 100F",
+        "thursday": "foggy, low of 50F, high of 70F",
+        "sunday": "hail, low of 30F, high of 40F",
+        "location": "carson",
+        "saturday": "raining, low of 30F, high of 40F",
+        "today": "monday"
+      },
+      {
+        "monday": "drizzle, low of 30F, high of 50F",
+        "tuesday": "clear skies, low of 40F, high of 50F",
+        "friday": "raining, low of 20F, high of 40F",
+        "wednesday": "cloudy, low of 40F, high of 50F",
+        "thursday": "clear skies, low of 50F, high of 60F",
+        "sunday": "cloudy, low of 90F, high of 100F",
+        "location": "seattle",
+        "saturday": "foggy, low of 70F, high of 80F",
+        "today": "monday"
+      },
+      {
+        "monday": "blizzard, low of 20F, high of 40F",
+        "tuesday": "dew, low of 60F, high of 70F",
+        "friday": "drizzle, low of 70F, high of 90F",
+        "wednesday": "clear skies, low of 90F, high of 100F",
+        "thursday": "dew, low of 90F, high of 100F",
+        "sunday": "rain, low of 60F, high of 70F",
+        "location": "alhambra",
+        "saturday": "hot, low of 80F, high of 100F",
+        "today": "monday"
+      },
+      {
+        "monday": "stormy, low of 80F, high of 100F",
+        "tuesday": "blizzard, low of 30F, high of 50F",
+        "friday": "overcast, low of 30F, high of 50F",
+        "wednesday": "raining, low of 70F, high of 90F",
+        "thursday": "clear skies, low of 70F, high of 90F",
+        "sunday": "overcast, low of 60F, high of 80F",
+        "location": "mountain view",
+        "saturday": "stormy, low of 20F, high of 40F",
+        "today": "monday"
+      },
+      {
+        "monday": "cloudy, low of 60F, high of 70F",
+        "tuesday": "overcast, low of 40F, high of 50F",
+        "friday": "raining, low of 90F, high of 100F",
+        "wednesday": "clear skies, low of 80F, high of 90F",
+        "thursday": "windy, low of 80F, high of 100F",
+        "sunday": "raining, low of 60F, high of 80F",
+        "location": "grand rapids",
+        "saturday": "foggy, low of 80F, high of 90F",
+        "today": "monday"
+      },
+      {
+        "monday": "rain, low of 40F, high of 50F",
+        "tuesday": "clear skies, low of 30F, high of 40F",
+        "friday": "clear skies, low of 40F, high of 60F",
+        "wednesday": "hail, low of 20F, high of 30F",
+        "thursday": "clear skies, low of 20F, high of 30F",
+        "sunday": "rain, low of 20F, high of 30F",
+        "location": "redwood city",
+        "saturday": "frost, low of 40F, high of 60F",
+        "today": "monday"
+      }
+    ],
+    "column_names": [
+      "location",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+      "today"
+    ],
+    "kb_title": "weekly forecast"
+  }
+schedule = {
+    "items": [
+      {
+        "room": "-",
+        "agenda": "-",
+        "time": "1pm",
+        "date": "the 4th",
+        "party": "sister",
+        "event": "tennis activity"
+      },
+      {
+        "room": "conference room 50",
+        "agenda": "discuss the company picnic",
+        "time": "6pm",
+        "date": "the 8th",
+        "party": "boss",
+        "event": "meeting"
+      },
+      {
+        "room": "-",
+        "agenda": "-",
+        "time": "7pm",
+        "date": "friday",
+        "party": "Jon",
+        "event": "optometrist appointment"
+      },
+      {
+        "room": "100 conference room",
+        "agenda": "onboard new members",
+        "time": "6pm",
+        "date": "tuesday",
+        "party": "management",
+        "event": "conference"
+      },
+      {
+        "room": "-",
+        "agenda": "-",
+        "time": "9am",
+        "date": "the 10th",
+        "party": "father",
+        "event": "taking medicine"
+      },
+      {
+        "room": "-",
+        "agenda": "-",
+        "time": "2pm",
+        "date": "the 4th",
+        "party": "aunt",
+        "event": "doctor appointment"
+      }
+    ],
+    "column_names": [
+      "event",
+      "time",
+      "date",
+      "room",
+      "agenda",
+      "party"
+    ],
+    "kb_title": "calendar"
+  }
+kbs = {'navigate': navigate, 'schedule': schedule, 'weather': weather}
 
 def fix_random_seed(seed):
     random.seed(seed)
@@ -119,6 +335,7 @@ def main(config):
     setattr(aeed_config, 'include_eod', False) # for StED model
     setattr(aeed_config, 'lowercase', True)
     setattr(aeed_config, 'vocab', 'vocabs/maluuba.json')
+    setattr(aeed_config, 'max_ctx_len', 16)  # kbs中items数量 + backward_size
 
     setattr(fsdg_config, 'data_dir', config.data_dir)
     setattr(fsdg_config, 'fsdg_domain_description', config.fsdg_domain_description)
@@ -127,12 +344,63 @@ def main(config):
     setattr(fsdg_config, 'use_gpu', config.use_gpu)
     setattr(fsdg_config, 'vocab', 'vocabs/stanford.json')
     setattr(fsdg_config, 'batch_size', 1)
+    setattr(fsdg_config, 'rnn_cell', 'lstm')
+    setattr(fsdg_config, 'embed_size', 200)
+    setattr(fsdg_config, 'utt_type', 'rnn')
+    setattr(fsdg_config, 'utt_cell_size', 256)
+    setattr(fsdg_config, 'ctx_cell_size', 512)
+    setattr(fsdg_config, 'dec_cell_size', 512)
+    setattr(fsdg_config, 'bi_ctx_cell', False)
+    setattr(fsdg_config, 'max_utt_len', 20)
+    setattr(fsdg_config, 'max_dec_len', 40)
+    setattr(fsdg_config, 'num_layer', 1)
+    setattr(fsdg_config, 'use_attn', True)
+    setattr(fsdg_config, 'attn_type', 'cat')
+    setattr(fsdg_config, 'max_vocab_cnt', 10000)
+    setattr(fsdg_config, 'op', 'adam')
+    setattr(fsdg_config, 'backward_size', 14)
+    setattr(fsdg_config, 'step_size', 2)
+    setattr(fsdg_config, 'grad_clip', 3.0)
+    setattr(fsdg_config, 'init_w', 0.08)
+    setattr(fsdg_config, 'init_lr', 0.001)
+    setattr(fsdg_config, 'momentum', 0.0)
+    setattr(fsdg_config, 'lr_hold', 1)
+    setattr(fsdg_config, 'lr_decay', 0.6)
+    setattr(fsdg_config, 'dropout', 0.3)
+    setattr(fsdg_config, 'improve_threshold', 0.996)
+    setattr(fsdg_config, 'patient_increase', 2.0)
+    setattr(fsdg_config, 'early_stop', True)
+    setattr(fsdg_config, 'max_epoch', 50)
+    setattr(fsdg_config, 'preview_batch_num', 50)
+    setattr(fsdg_config, 'include_domain', True)
+    setattr(fsdg_config, 'include_example', False)
+    setattr(fsdg_config, 'include_state', True)
+    setattr(fsdg_config, 'random_seed', config.random_seed)
+    setattr(fsdg_config, 'dd_loss_coef', 0.0)
+    setattr(fsdg_config, 'save_model', True)
+    setattr(fsdg_config, 'print_step', 100)
+    setattr(fsdg_config, 'ckpt_step', 400)
+    setattr(fsdg_config, 'gen_type', 'greedy')
+    setattr(fsdg_config, 'avg_type', 'word')
+    setattr(fsdg_config, 'black_domains', 20)
+    setattr(fsdg_config, 'beam_size', ['navigate'])
+    setattr(fsdg_config, 'black_ratio', 1.0)
+    setattr(fsdg_config, 'target_example_cnt', 150)
+    setattr(fsdg_config, 'source_example_cnt', 150)
+    setattr(fsdg_config, 'domain_description', 'nlu')
+    setattr(fsdg_config, 'entities_file', 'NeuralDialog_ZSDG/data/stanford/kvret_entities.json')
+    setattr(fsdg_config, 'action_match', True)
+    setattr(fsdg_config, 'use_ptr', True)
+    setattr(fsdg_config, 'forward_only', False)
+    setattr(fsdg_config, 'max_ctx_len', 16)  # kbs中items数量 + backward_size
 
     aeed_corpus_client = getattr(corpora, aeed_config.corpus_client)(aeed_config)
+    # print(aeed_corpus_client)
     aeed_corpus_client.vocab, aeed_corpus_client.rev_vocab, aeed_corpus_client.unk_id = load_vocab(aeed_config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))
 
     fsdg_corpus_client = corpora.LAZslStanfordCorpusPre(fsdg_config)
+
     fsdg_corpus_client.vocab, fsdg_corpus_client.rev_vocab, fsdg_corpus_client.unk_id = load_vocab(fsdg_config.vocab)
 
     evaluator = evaluators.BleuEntEvaluator("SMD", fsdg_corpus_client.ent_metas)
@@ -141,29 +409,44 @@ def main(config):
     # TODO: load sted model
     aeed_model = load_model(config.model, config.model_name, config.model_type, aeed_config, corpus_client=aeed_corpus_client)
     # TODO: load fsdg model
-
     fsdg_model = load_fsdg_model(fsdg_config, fsdg_corpus_client)
 
     utts = []
     features = [np.array([0]*10)]
+
     intent = ''
     while True:
-        if not intent:
-            while True:
-                intent = input('choose intent: 1: weather, 2: schedule, 3: navigate\n').strip()
-                if intent == '1':
-                    intent = 'weather'
-                    break
-                elif intent == '2':
-                    intent = 'schedule'
-                    break
-                elif intent == '3':
-                    intent = 'navigate'
-                    break
-                else:
-                    print('Wrong choice')
-
-        usr_utt = input('input:')
+        intent = input('choose intent: 1: weather, 2: schedule, 3: navigate\n').strip()
+        if intent == '1':
+            intent = 'weather'
+            break
+        elif intent == '2':
+            intent = 'schedule'
+            break
+        elif intent == '3':
+            intent = 'navigate'
+            break
+        else:
+            print('Wrong choice')
+    is_kb = True
+    while True:
+        is_kb = input('whether use kb information: 1: yes, 2: no\n').strip()
+        if is_kb == '1':
+            is_kb = True
+            print('kb information:\n', kbs[intent], '\n')
+            break
+        elif is_kb == '2':
+            is_kb = False
+            break
+        else:
+            print('Wrong choice')
+    dio_turn = 0
+    while True:
+        dio_turn += 1
+        usr_utt = input('Input(say \'thank you\'to terminate the conversation): ')
+        if 'thank you' in usr_utt or 'thanks' in usr_utt:
+            print('bot: ', 'you are welcome!')
+            break
         utts.append(usr_utt)
         # print('utts: ', utts)
         # TODO: process data
@@ -188,13 +471,17 @@ def main(config):
 
         # scenario: {kb:{items, column_names, kb_title}, task:{intent}, uuid}
         scenario = {}
-        kb = {}
+
+        kb_useful = kbs[intent]
+        kb_useless = {}
         items = []
         column_names = []
         kb_title = 'unknown'
-        kb['items'] = items
-        kb['column_names'] = column_names
-        kb['kb_title'] = kb_title
+        kb_useless['items'] = items
+        kb_useless['column_names'] = column_names
+        kb_useless['kb_title'] = kb_title
+        kb = kb_useful if is_kb else kb_useless
+
         task = {}
         task['intent'] = intent
         uuid = 'unknown'
@@ -218,8 +505,9 @@ def main(config):
         # TODO: get features from aeed model
         feature = process_data_feed(aeed_model, aeed_feed, aeed_config)
         feature = np.array(feature[0])
+        # feature = np.array([1, 4, 5, 5, 8, 5, 5, 9, 9, 3]) if dio_turn==1 else np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         features.append(feature)
-        # print(features)
+        # print('features: ', features)
         # print(utts)
         assert len(features) == len(utts)+1
 
@@ -231,15 +519,32 @@ def main(config):
         fsdg_corpus_client.add_test_data(totol_data, features)
 
         test_dial = fsdg_corpus_client.get_corpus()['test']
+        # print('test_dial', test_dial)
 
         fsdg_feed = fsdg_data_loaders.ZslLASMDDialDataLoaderPre("Test", test_dial, fsdg_config)
 
         response = hred_utils.predict(fsdg_model, fsdg_feed, fsdg_config, evaluator, num_batch=None)
 
-        # response = 'On Friday there will be clear skies in Alhambra'
-        # print('bot:', ' '.join(response.split()[1:]))
-        print('bot:', ' '.join(response.split()[2:]))
-        utts.append(' '.join(response.split()[2:]))
+        response = ' '.join(response.split()[2:])
+        def clear_repeat(text):
+            POUN = [',', '.', '?', '!']
+            res = ['']
+            for word in text.split():
+                if word[-1] in POUN:
+                    if word[:-1] == res[-1]:
+                        res[-1] = word
+                        continue
+                else:
+                    if word == res[-1]:
+                        res[-1] = word
+                        continue
+                res.append(word)
+            return ' '.join(res)
+        response = clear_repeat(response)
+        print('bot:', response)
+        if 'you are welcome' in response or 'you\' re welcome' in response:
+            break
+        utts.append(response)
         features.append(np.array([0]*10))
 
 

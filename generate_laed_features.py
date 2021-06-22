@@ -39,6 +39,31 @@ def process_data_feed(model, feed, config):
     feed.epoch_init(config, shuffle=False, verbose=True)
     while True:
         batch = feed.next_batch()
+        print()
+        print(batch.contexts[0])
+        print(batch.outputs[0])
+        print(batch.laed_z[0])
+        print()
+        print(batch.contexts[1])
+        print(batch.outputs[1])
+        print(batch.laed_z[1])
+        print()
+        print(batch.contexts[2])
+        print(batch.outputs[2])
+        print(batch.laed_z[2])
+        print()
+        print(batch.contexts[3])
+        print(batch.outputs[3])
+        print(batch.laed_z[3])
+        print()
+        print(batch.contexts[4])
+        print(batch.outputs[4])
+        print(batch.laed_z[4])
+        print()
+        print(batch.contexts[5])
+        print(batch.outputs[5])
+        print(batch.laed_z[5])
+
         if batch is None:
             break
         laed_out = model.forward(batch, TEACH_FORCE, config.gen_type, return_latent=True)
@@ -46,6 +71,7 @@ def process_data_feed(model, feed, config):
         print(len(laed_z))
         print(laed_z)
         features.append(laed_z.data.cpu().numpy())
+        stop
     return np.array(features).reshape(-1, config.y_size)
     # return np.array(features).reshape(-1, config.y_size * config.k)
 
@@ -100,8 +126,9 @@ def main(config):
     if config.vocab:
         corpus_client.vocab, corpus_client.rev_vocab, corpus_client.unk_token = load_vocab(config.vocab)
     prepare_dirs_loggers(config, os.path.basename(__file__))
+
     dial_corpus = corpus_client.get_corpus()
-    stop
+
     # train_dial, valid_dial, test_dial = dial_corpus['train'], dial_corpus['valid'], dial_corpus['test']
     # all_dial = train_dial + valid_dial + test_dial
     # all_utts = reduce(lambda x, y: x + y, all_dial, [])
@@ -129,6 +156,8 @@ def main(config):
             pad_mode = None
         features = deflatten_laed_features(features, dataset, pad_mode=pad_mode)
         assert sum(map(len, dataset)) == sum(map(lambda x: x.shape[0], features))
+
+        stop
 
         if not os.path.exists(config.out_folder):
             os.makedirs(config.out_folder)

@@ -1,7 +1,7 @@
 python generate_laed_features.py \
-    logs/2021-06-07T10-35-18-st_ed.py \
-    laed_featuress/st_ed \
-    --model_name StED \
+    logs/2021-06-08T17-35-33-ae_ed.py \
+    laed_featuress/ae_ed \
+    --model_name AeED \
     --model_type dialog \
     --data_dir NeuralDialog_ZSDG/data/stanford \
     --corpus_client ZslStanfordCorpusPre \

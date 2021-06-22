@@ -382,6 +382,7 @@ class AeED(LAED):
         dec_init_state = self.c_init_connector(sample_y) + c_last.unsqueeze(0)
 
         # decode
+        # gen_type = 'beam'
         dec_outs, dec_last, dec_ctx = self.decoder(batch_size, out_utts[:, 0:-1], dec_init_state,
                                                    attn_context=attn_inputs,
                                                    mode=mode, gen_type=gen_type,

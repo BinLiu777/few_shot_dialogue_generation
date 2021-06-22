@@ -30,14 +30,10 @@ def predict(model, data_feed, config, evaluator, num_batch=1):
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
             break
-        print(batch.keys())
-        for k in batch.keys():
-            if k != 'domains' and k !='contexts_elmo':
-                print(k, batch[k].shape)
-        print()
-        print(batch.contexts[0])
-        print(batch.outputs[0])
-        print(batch.laed_z[0])
+        # print(batch.keys())
+        # for k in batch.keys():
+        #     if k != 'domains' and k !='contexts_elmo':
+        #         print(k, batch[k].shape)
         outputs, labels = model(batch, mode=GEN, gen_type=config.gen_type)
 
         # move from GPU to CPU
