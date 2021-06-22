@@ -551,7 +551,7 @@ def main(config):
 def run_demo():
     # Data
     data_arg = add_argument_group('Data')
-    data_arg.add_argument('--model', default='logs/2021-06-08T17-35-33-ae_ed.py')
+    data_arg.add_argument('--model', default='logs/2021-06-10T19-32-51-ae_ed.py')
     data_arg.add_argument('--load_sess', default='logs/2021-06-09T19-31-12-train_fsdg.py-6a61fab0')
     data_arg.add_argument('--model_name', default='AeED')
     data_arg.add_argument('--model_type', default='dialog')
