@@ -130,6 +130,14 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
         print(batch.contexts[1])
         print(batch.outputs[1])
         print(batch.laed_z[1])
+        print()
+        print(batch.contexts[2])
+        print(batch.outputs[2])
+        print(batch.laed_z[2])
+        print()
+        print(batch.contexts[3])
+        print(batch.outputs[3])
+        print(batch.laed_z[3])
 
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
