@@ -548,16 +548,16 @@ def main(config):
         features.append(np.array([0]*10))
 
 
-if __name__ == "__main__":
+def run_demo():
     # Data
     data_arg = add_argument_group('Data')
-    data_arg.add_argument('model')
-    data_arg.add_argument('load_sess')
-    data_arg.add_argument('--model_name', required=True)
+    data_arg.add_argument('--model', default='logs/2021-06-08T17-35-33-ae_ed.py')
+    data_arg.add_argument('--load_sess', default='logs/2021-06-09T19-31-12-train_fsdg.py-6a61fab0')
+    data_arg.add_argument('--model_name', default='AeED')
     data_arg.add_argument('--model_type', default='dialog')
-    data_arg.add_argument('--data_dir', nargs='+')
+    data_arg.add_argument('--data_dir', nargs='+', default=['NeuralDialog_ZSDG/data/stanford'])
     data_arg.add_argument('--corpus_client', default='ZslStanfordCorpusPre')
-    data_arg.add_argument('--data_loader', required=True, help='PTBDataLoader/SMDDataLoader/SMDDialogSkipLoader')
+    data_arg.add_argument('--data_loader', default='SMDDataLoaderPre')
     data_arg.add_argument('--batch_size', default=1)
     data_arg.add_argument('--vocab', default=None)
     data_arg.add_argument('--domain_description', default='annotation')
@@ -565,7 +565,7 @@ if __name__ == "__main__":
 
     # MISC
     misc_arg = add_argument_group('Misc')
-    misc_arg.add_argument('--use_gpu', type=str2bool, default=True)
+    misc_arg.add_argument('--use_gpu', type=str2bool, default=False)
     misc_arg.add_argument('--forward_only', type=str2bool, default=True)
     misc_arg.add_argument('--gen_type', type=str, default='greedy')
     misc_arg.add_argument('--random_seed', type=int, default=2021)
@@ -573,3 +573,6 @@ if __name__ == "__main__":
     config, unparsed = get_config()
     fix_random_seed(config.random_seed)
     main(config)
+
+if __name__ == "__main__":
+    run_demo()
