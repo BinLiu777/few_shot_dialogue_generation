@@ -11,10 +11,9 @@ class SMDDataLoaderPre(DataLoader):
         super(SMDDataLoaderPre, self).__init__(name, fix_batch=config.fix_batch)
         self.name = name
         self.max_utt_size = config.max_utt_len
-        # print(data)
+        self.max_ctx_len = config.max_ctx_len
         self.data = self.flatten_dialog(data, config.backward_size)
         self.data_size = len(self.data)
-        # print(self.data_size)
         if config.fix_batch:
             all_ctx_lens = [len(d.context) for d in self.data]
             self.indexes = list(np.argsort(all_ctx_lens))[::-1]
@@ -54,7 +53,7 @@ class SMDDataLoaderPre(DataLoader):
             metas.append(resp.meta)
 
         vec_context_lens = np.array(context_lens)
-        vec_context = np.zeros((self.batch_size, np.max(vec_context_lens),
+        vec_context = np.zeros((self.batch_size, self.max_ctx_len,
                                 self.max_utt_size), dtype=np.int32)
         vec_outs = np.zeros((self.batch_size, np.max(out_lens)), dtype=np.int32)
         vec_out_lens = np.array(out_lens)
