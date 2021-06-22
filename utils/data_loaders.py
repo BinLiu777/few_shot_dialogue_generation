@@ -363,6 +363,7 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
     def __init__(self, name, data, config, warmup_data=None):
         super(ZslLASMDDialDataLoaderPre, self).__init__(name)
         self.max_utt_size = config.max_utt_len
+        self.max_ctx_size = config.max_ctx_len
 
         self.data = self.flatten_dialog(data, config.backward_size)
         self.data_size = len(self.data)
@@ -383,6 +384,8 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
     def flatten_dialog(self, data, backward_size):
         results = []
         for dialog in data:
+            # print('dialog')
+            # print(dialog)
             e_id = len(dialog)
             s_id = max(0, e_id - backward_size)
             response = dialog[0].copy()
@@ -399,6 +402,8 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
                 turn['utt_raw'] = self.pad_to(self.max_utt_size, turn.utt_raw, do_pad=False)
                 contexts.append(turn)
             results.append(Pack(context=contexts, response=response))
+        # print('results')
+        # print(results)
         return results
 
     def epoch_init(self, config, shuffle=True, verbose=True):
@@ -446,7 +451,9 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
         laed_z = []
         for row in rows:
             in_row, out_row = row.context, row.response
-
+            # print('row:', row)
+            # print('in_row', in_row)
+            # print('out_row', out_row)
             # source context
             batch_ctx = []
             for item in out_row.kb:
@@ -478,6 +485,8 @@ class ZslLASMDDialDataLoaderPre(DataLoader):
         domain_metas = np.array(domain_metas)
         vec_ctx_lens = np.array(ctx_lens)
         max_ctx_len = np.max(vec_ctx_lens)
+        # print(max_ctx_len)
+        max_ctx_len = self.max_ctx_size
         vec_ctx_utts = np.zeros((self.batch_size, max_ctx_len, self.max_utt_size), dtype=np.int32)
         vec_ctx_confs = np.ones((self.batch_size, max_ctx_len), dtype=np.float32)
 
@@ -667,8 +676,6 @@ class ZslLASMDDialDataLoader(DataLoader):
         max_ctx_len = np.max(vec_ctx_lens)
         vec_ctx_utts = np.zeros((self.batch_size, max_ctx_len, self.max_utt_size), dtype=np.int32)
         vec_ctx_confs = np.ones((self.batch_size, max_ctx_len), dtype=np.float32)
-        print(max_ctx_len, vec_ctx_utts)
-        stop
 
         vec_out_utts = np.zeros((self.batch_size, np.max(out_lens)), dtype=np.int32)
         vec_out_lens = np.array(out_lens)
