@@ -633,9 +633,6 @@ class ZslLASMDDialDataLoader(DataLoader):
         laed_z = []
         for row in rows:
             in_row, out_row = row.context, row.response
-            print(in_row)
-            print(out_row)
-            stop
 
             # source context
             batch_ctx = []
@@ -670,6 +667,8 @@ class ZslLASMDDialDataLoader(DataLoader):
         max_ctx_len = np.max(vec_ctx_lens)
         vec_ctx_utts = np.zeros((self.batch_size, max_ctx_len, self.max_utt_size), dtype=np.int32)
         vec_ctx_confs = np.ones((self.batch_size, max_ctx_len), dtype=np.float32)
+        print(max_ctx_len, vec_ctx_utts)
+        stop
 
         vec_out_utts = np.zeros((self.batch_size, np.max(out_lens)), dtype=np.int32)
         vec_out_lens = np.array(out_lens)
