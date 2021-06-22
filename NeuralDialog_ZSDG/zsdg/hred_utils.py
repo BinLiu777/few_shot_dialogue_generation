@@ -30,10 +30,10 @@ def predict(model, data_feed, config, evaluator, num_batch=1):
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
             break
-        print(batch.keys())
-        for k in batch.keys():
-            if k != 'domains' and k !='contexts_elmo':
-                print(k, batch[k].shape, batch[k][0])
+        # print(batch.keys())
+        # for k in batch.keys():
+        #     if k != 'domains' and k !='contexts_elmo':
+        #         print(k, batch[k].shape, batch[k][0])
         outputs, labels = model(batch, mode=GEN, gen_type=config.gen_type)
 
         # move from GPU to CPU
@@ -121,8 +121,7 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
         print(batch.keys())
         for k in batch.keys():
             if k != 'domains' and k !='contexts_elmo':
-                print(k, batch[k].shape, batch[k][0])
-        stop
+                print(k, batch[k].shape)
         # print(batch['outputs'])
         # print(len(batch['contexts']))
         # print(len(batch['outputs']))
@@ -185,6 +184,7 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
                 if attn:
                     write("[[{}]]".format(attn))
                 write("-")
+        stop
 
     write(evaluator.get_report(include_error=dest_f is not None))
     logger.info("Generation Done")
