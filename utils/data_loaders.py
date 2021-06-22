@@ -625,8 +625,6 @@ class ZslLASMDDialDataLoader(DataLoader):
     def _prepare_batch(self, selected_index):
         # the batch index, the starting point and end point for segment
         rows = [self.data[idx] for idx in selected_index]
-        print(rows)
-        stop
 
         ctx_lens, ctx_utts, ctx_utts_raw = [], [], []
         out_utts, out_lens, out_utts_raw = [], [], []
@@ -635,6 +633,9 @@ class ZslLASMDDialDataLoader(DataLoader):
         laed_z = []
         for row in rows:
             in_row, out_row = row.context, row.response
+            print(in_row)
+            print(out_row)
+            stop
 
             # source context
             batch_ctx = []
