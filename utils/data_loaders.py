@@ -649,8 +649,6 @@ class ZslLASMDDialDataLoader(DataLoader):
 
             ctx_lens.append(len(batch_ctx))
             ctx_utts.append(batch_ctx)
-            print(ctx_utts)
-            stop
 
             # target response
             out_utt = [t for idx, t in enumerate(out_row.utt)]
