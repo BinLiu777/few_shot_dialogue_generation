@@ -122,9 +122,15 @@ def generate(model, data_feed, config, evaluator, num_batch=1, dest_f=None):
         for k in batch.keys():
             if k != 'domains' and k !='contexts_elmo':
                 print(k, batch[k].shape)
-        # print(batch['outputs'])
-        # print(len(batch['contexts']))
-        # print(len(batch['outputs']))
+        print()
+        print(batch.contexts[0])
+        print(batch.outputs[0])
+        print(batch.laed_z[0])
+        print()
+        print(batch.contexts[1])
+        print(batch.outputs[1])
+        print(batch.laed_z[1])
+
         if batch is None or (num_batch is not None
                              and data_feed.ptr > num_batch):
             break
