@@ -29,7 +29,7 @@ while True:
         print('Wrong choice')
 context = []
 
-url = ' http://192.168.152.81:7777/'
+url = 'http://10.106.66.129:7777'
 headers = {'Content-Type': 'application/json'}
 dio_turn = 0
 while True:
